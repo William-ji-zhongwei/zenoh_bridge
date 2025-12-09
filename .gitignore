@@ -3,11 +3,6 @@ build/
 compile_commands.json
 .vscode/
 dist/
-*.o
-*.a
-*.so
-*.dylib
-*.dll
 zenoh_pub
 zenoh_sub
 output/

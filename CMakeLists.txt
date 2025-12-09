@@ -11,10 +11,21 @@ set(CMAKE_INSTALL_RPATH_USE_LINK_PATH TRUE)
 # --- Dependencies (Local Vendor) ---
 set(ZENOH_ROOT "${CMAKE_CURRENT_SOURCE_DIR}/deps/zenoh")
 
+# Detect Architecture
+if(CMAKE_SYSTEM_PROCESSOR MATCHES "aarch64|ARM64")
+    set(ARCH_DIR "aarch64")
+elseif(CMAKE_SYSTEM_PROCESSOR MATCHES "x86_64|amd64")
+    set(ARCH_DIR "x86_64")
+else()
+    message(WARNING "Unknown processor: ${CMAKE_SYSTEM_PROCESSOR}. Defaulting to x86_64.")
+    set(ARCH_DIR "x86_64")
+endif()
+message(STATUS "Target Architecture: ${ARCH_DIR}")
+
 # 1. Zenoh-C Library (Imported)
 add_library(libzenohc SHARED IMPORTED)
 set_target_properties(libzenohc PROPERTIES
-    IMPORTED_LOCATION "${ZENOH_ROOT}/lib/libzenohc.so"
+    IMPORTED_LOCATION "${ZENOH_ROOT}/lib/${ARCH_DIR}/libzenohc.so"
     INTERFACE_INCLUDE_DIRECTORIES "${ZENOH_ROOT}/include"
 )
 
@@ -46,5 +57,5 @@ endif()
 
 # Install Rules
 install(TARGETS zenoh_pub zenoh_sub DESTINATION bin)
-install(FILES "${ZENOH_ROOT}/lib/libzenohc.so" DESTINATION lib)
+install(FILES "${ZENOH_ROOT}/lib/${ARCH_DIR}/libzenohc.so" DESTINATION lib)
 

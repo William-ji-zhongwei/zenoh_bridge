@@ -9,6 +9,9 @@ It is designed to be portable:
 
 *   `src/`: Source code (`publisher.cpp`, `subscriber.cpp`).
 *   `deps/zenoh/`: Pre-compiled Zenoh headers and libraries.
+    *   `include/`: Headers.
+    *   `lib/aarch64/`: ARM64 libraries.
+    *   `lib/x86_64/`: x86_64 libraries.
 *   `scripts/`: Build and run scripts.
     *   `build.sh`: Compiles the project.
     *   `run.sh`: Runs the publisher or subscriber.
@@ -19,6 +22,8 @@ It is designed to be portable:
 ## How to Build and Run Locally
 
 You only need a C++ compiler (g++/clang) and CMake. You do **NOT** need to install Zenoh system-wide.
+
+**Note**: This project supports both `aarch64` and `x86_64`. Ensure you have the correct `libzenohc.so` in `deps/zenoh/lib/<arch>/`.
 
 ### Build
 

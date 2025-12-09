@@ -7,9 +7,19 @@ BUILD_DIR="$PROJECT_ROOT/build"
 DIST_DIR="$PROJECT_ROOT/dist"
 OUTPUT_DIR="$PROJECT_ROOT/output"
 
+# Detect Architecture
+ARCH=$(uname -m)
+if [[ "$ARCH" == "x86_64" ]]; then
+    ARCH_TAG="x86_64"
+elif [[ "$ARCH" == "aarch64" ]]; then
+    ARCH_TAG="aarch64"
+else
+    ARCH_TAG="$ARCH"
+fi
+
 # Generate timestamp
 TIMESTAMP=$(date +%Y%m%d_%H%M%S)
-PACKAGE_NAME="zenoh_project_package_${TIMESTAMP}.tar.gz"
+PACKAGE_NAME="zenoh_project_package_${ARCH_TAG}_${TIMESTAMP}.tar.gz"
 
 echo "Cleaning previous distribution..."
 rm -rf "$DIST_DIR"
