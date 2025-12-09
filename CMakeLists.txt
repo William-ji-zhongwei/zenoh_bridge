@@ -4,19 +4,36 @@ project(zenoh_cross_domain_project VERSION 0.1.0 LANGUAGES CXX)
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
-# Dependencies
-# Assuming zenoh-cpp and zenoh-c are installed on the system.
-# If not, you might need to adjust CMAKE_PREFIX_PATH or use FetchContent.
-find_package(zenohc CONFIG REQUIRED)
-find_package(zenohcpp CONFIG REQUIRED)
+# RPATH Configuration
+set(CMAKE_INSTALL_RPATH "$ORIGIN/../lib")
+set(CMAKE_INSTALL_RPATH_USE_LINK_PATH TRUE)
+
+# --- Dependencies (Local Vendor) ---
+set(ZENOH_ROOT "${CMAKE_CURRENT_SOURCE_DIR}/deps/zenoh")
+
+# 1. Zenoh-C Library (Imported)
+add_library(libzenohc SHARED IMPORTED)
+set_target_properties(libzenohc PROPERTIES
+    IMPORTED_LOCATION "${ZENOH_ROOT}/lib/libzenohc.so"
+    INTERFACE_INCLUDE_DIRECTORIES "${ZENOH_ROOT}/include"
+)
+
+# 2. Zenoh-CPP (Header-only wrapper)
+add_library(zenohcxx INTERFACE)
+target_link_libraries(zenohcxx INTERFACE libzenohc)
+target_include_directories(zenohcxx INTERFACE "${ZENOH_ROOT}/include")
+target_compile_definitions(zenohcxx INTERFACE ZENOHCXX_ZENOHC)
+
+# Alias to match previous usage
+add_library(zenohcxx::zenohc ALIAS zenohcxx)
 
 # Publisher Executable
 add_executable(zenoh_pub src/publisher.cpp)
-target_link_libraries(zenoh_pub PRIVATE zenohcpp::libzenohcpp)
+target_link_libraries(zenoh_pub PRIVATE zenohcxx::zenohc)
 
 # Subscriber Executable
 add_executable(zenoh_sub src/subscriber.cpp)
-target_link_libraries(zenoh_sub PRIVATE zenohcpp::libzenohcpp)
+target_link_libraries(zenoh_sub PRIVATE zenohcxx::zenohc)
 
 # Compiler warnings (optional but recommended)
 if(MSVC)
@@ -26,3 +43,8 @@ else()
     target_compile_options(zenoh_pub PRIVATE -Wall -Wextra -Wpedantic)
     target_compile_options(zenoh_sub PRIVATE -Wall -Wextra -Wpedantic)
 endif()
+
+# Install Rules
+install(TARGETS zenoh_pub zenoh_sub DESTINATION bin)
+install(FILES "${ZENOH_ROOT}/lib/libzenohc.so" DESTINATION lib)
+

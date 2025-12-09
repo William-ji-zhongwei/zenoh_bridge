@@ -2,6 +2,7 @@ build/
 .cache/
 compile_commands.json
 .vscode/
+dist/
 *.o
 *.a
 *.so
@@ -9,3 +10,4 @@ compile_commands.json
 *.dll
 zenoh_pub
 zenoh_sub
+output/

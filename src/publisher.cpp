@@ -8,10 +8,10 @@ using namespace std::chrono_literals;
 
 int main(int argc, char** argv) {
     // Initialize configuration
-    zenoh::Config config;
+    zenoh::Config config = zenoh::Config::create_default();
     if (argc > 1) {
         std::cout << "Loading configuration from '" << argv[1] << "'..." << std::endl;
-        config = zenoh::Config::create_from_file(argv[1]);
+        config = zenoh::Config::from_file(argv[1]);
     }
 
     // Open session

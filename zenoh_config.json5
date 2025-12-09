@@ -1,6 +1,0 @@
-// Zenoh configuration file
-{
-  // "mode": "peer", // "peer" or "client"
-  // "connect": { "endpoints": ["tcp/127.0.0.1:7447"] },
-  // "listen": { "endpoints": ["tcp/0.0.0.0:7447"] }
-}
