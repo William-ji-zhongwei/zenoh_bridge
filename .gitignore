@@ -1,0 +1,11 @@
+build/
+.cache/
+compile_commands.json
+.vscode/
+*.o
+*.a
+*.so
+*.dylib
+*.dll
+zenoh_pub
+zenoh_sub
