@@ -1,0 +1,30 @@
+{
+  "zenoh_mode": "client",
+  "zenoh_connect": "",
+  "streams": [
+    {
+      "zenoh_topic": "vr/robot/control",
+      "protocol": "udp",
+      "local_host": "127.0.0.1",
+      "local_port": 8888,
+      "grpc_service": "",
+      "grpc_method": ""
+    },
+    {
+      "zenoh_topic": "vr/robot/command",
+      "protocol": "udp",
+      "local_host": "127.0.0.1",
+      "local_port": 8889,
+      "grpc_service": "",
+      "grpc_method": ""
+    },
+    {
+      "zenoh_topic": "vr/data/stream",
+      "protocol": "grpc",
+      "local_host": "127.0.0.1",
+      "local_port": 50051,
+      "grpc_service": "DataService",
+      "grpc_method": "ProcessData"
+    }
+  ]
+}

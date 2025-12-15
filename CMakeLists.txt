@@ -46,16 +46,51 @@ target_link_libraries(zenoh_pub PRIVATE zenohcxx::zenohc)
 add_executable(zenoh_sub src/subscriber.cpp)
 target_link_libraries(zenoh_sub PRIVATE zenohcxx::zenohc)
 
+# Data Receiver Bridge Executable
+add_executable(data_bridge 
+    src/data_bridge.cpp
+    src/receiver_bridge.cpp
+    src/common.cpp
+)
+target_include_directories(data_bridge PRIVATE "${CMAKE_CURRENT_SOURCE_DIR}/include")
+target_link_libraries(data_bridge PRIVATE zenohcxx::zenohc)
+
+# Benchmark/Test Tools (from test/ directory)
+add_executable(benchmark_pub 
+    test/src/benchmark_pub.cpp
+    test/src/benchmark.cpp
+)
+target_include_directories(benchmark_pub PRIVATE 
+    "${CMAKE_CURRENT_SOURCE_DIR}/test/include"
+)
+target_link_libraries(benchmark_pub PRIVATE zenohcxx::zenohc)
+
+# Benchmark Receiver (UDP)
+add_executable(benchmark_recv 
+    test/src/benchmark_recv.cpp
+    test/src/benchmark.cpp
+)
+target_include_directories(benchmark_recv PRIVATE 
+    "${CMAKE_CURRENT_SOURCE_DIR}/test/include"
+)
+target_link_libraries(benchmark_recv PRIVATE zenohcxx::zenohc)
+
 # Compiler warnings (optional but recommended)
 if(MSVC)
     target_compile_options(zenoh_pub PRIVATE /W4)
     target_compile_options(zenoh_sub PRIVATE /W4)
+    target_compile_options(data_bridge PRIVATE /W4)
+    target_compile_options(benchmark_pub PRIVATE /W4)
+    target_compile_options(benchmark_recv PRIVATE /W4)
 else()
     target_compile_options(zenoh_pub PRIVATE -Wall -Wextra -Wpedantic)
     target_compile_options(zenoh_sub PRIVATE -Wall -Wextra -Wpedantic)
+    target_compile_options(data_bridge PRIVATE -Wall -Wextra -Wpedantic)
+    target_compile_options(benchmark_pub PRIVATE -Wall -Wextra -Wpedantic)
+    target_compile_options(benchmark_recv PRIVATE -Wall -Wextra -Wpedantic)
 endif()
 
 # Install Rules
-install(TARGETS zenoh_pub zenoh_sub DESTINATION bin)
+install(TARGETS zenoh_pub zenoh_sub data_bridge benchmark_pub benchmark_recv DESTINATION bin)
 install(FILES "${ZENOH_ROOT}/lib/${ARCH_DIR}/libzenohc.so" DESTINATION lib)
 

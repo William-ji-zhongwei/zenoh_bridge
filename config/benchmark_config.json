@@ -1,0 +1,14 @@
+{
+  "zenoh_mode": "client",
+  "zenoh_connect": "tcp/106.14.31.123:7447",
+  "streams": [
+    {
+      "zenoh_topic": "benchmark/data",
+      "protocol": "udp",
+      "local_host": "127.0.0.1",
+      "local_port": 8888,
+      "grpc_service": "",
+      "grpc_method": ""
+    }
+  ]
+}

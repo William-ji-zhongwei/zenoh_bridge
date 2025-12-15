@@ -26,27 +26,31 @@ rm -rf "$DIST_DIR"
 mkdir -p "$DIST_DIR"
 mkdir -p "$OUTPUT_DIR"
 
-# Build and Install (to dist/)
+# Prepare package directory
+PACKAGE_ROOT="$DIST_DIR/zenoh_bridge"
+mkdir -p "$PACKAGE_ROOT"
+
+# Build and Install (to dist/zenoh_bridge)
 echo "Building project..."
 mkdir -p "$BUILD_DIR"
 cd "$BUILD_DIR"
-cmake "$PROJECT_ROOT" -DCMAKE_INSTALL_PREFIX="$DIST_DIR"
+cmake "$PROJECT_ROOT" -DCMAKE_INSTALL_PREFIX="$PACKAGE_ROOT"
 make -j$(nproc)
 make install
 
 # Copy config file
 echo "Copying config..."
-cp "$PROJECT_ROOT/config/zenoh_config.json" "$DIST_DIR/"
+cp "$PROJECT_ROOT/config/zenoh_config.json" "$PACKAGE_ROOT/"
 
 # Copy run script
 echo "Copying run script..."
-cp "$PROJECT_ROOT/scripts/run.sh" "$DIST_DIR/"
+cp "$PROJECT_ROOT/scripts/run.sh" "$PACKAGE_ROOT/"
 
 # Create archive
 echo "Creating archive..."
 cd "$PROJECT_ROOT"
-# Create the tarball from the contents of dist/
-tar -czf "$OUTPUT_DIR/$PACKAGE_NAME" -C "$DIST_DIR" .
+# Create the tarball containing zenoh_bridge folder
+tar -czf "$OUTPUT_DIR/$PACKAGE_NAME" -C "$DIST_DIR" zenoh_bridge
 
 echo "Done! Package created at '$OUTPUT_DIR/$PACKAGE_NAME'"
 echo "Contents:"
